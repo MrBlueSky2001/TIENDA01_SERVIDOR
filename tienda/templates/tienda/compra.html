@@ -1,0 +1,37 @@
+{% extends 'tienda/base.html' %}
+{% block content %}
+    <div class="container">
+        <h1>Productos</h1>
+        <div class="row">
+            <div class="col-lg-3">
+                {# FORMULARIO #}
+                <div class="formulario">
+                    <form class="mb-3">
+                        <div class="input-group mt-5">
+                            {{ form.texto }}
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                        <div class="input-group mt-3">
+                            {{ form.marca }}
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                {% for producto in productos %}
+                    <div class="card d-inline-block my-2 mx-2" style="width: 18rem;">
+                      {#<img class="card-img-top" src="..." alt="Card image cap">#}
+                        <div class="card-body">
+                            <h5 class="card-title text-dark">{{ producto.nombre }}</h5>
+                            <p class="card-text text-dark">Modelo: {{ producto.modelo }}</p>
+                            <p class="card-text text-dark">Unidades: {{ producto.unidades }}</p>
+                            <p class="card-text text-dark">Precio: {{ producto.precio }}€</p>
+                            <a href="{% url 'checkout' pk=producto.pk %}" class="btn btn-primary">Compra</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

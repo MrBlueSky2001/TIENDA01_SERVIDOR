@@ -1,0 +1,28 @@
+body{
+    background-image: url("../img/coches.jpg");
+    background-size: contain;
+    color: white;
+}
+
+.col{
+    background-color: grey;
+    padding-bottom: 25px;
+}
+
+table, td, tr, th{
+    border: 2px solid white;
+    background-color: black;
+    /* text-decoration: none; */
+}
+
+th{
+    padding: 10px;
+}
+
+ul{
+    background-color: grey;
+}
+
+div.text-star{
+    background-color: grey;
+}
