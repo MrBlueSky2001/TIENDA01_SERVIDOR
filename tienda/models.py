@@ -51,8 +51,8 @@ class Compra(models.Model):
     iva = models.DecimalField(max_digits=4, decimal_places=2, default=0.21)
 
     def __str__(self):
-        return f'{self.user.username} {self.fecha}'
+        return f'{self.user} {self.producto}'
 
     class Meta:
-        unique_together = ['fecha', 'producto', 'user']
+        unique_together = ['user', 'fecha']
         verbose_name_plural = "Compras"

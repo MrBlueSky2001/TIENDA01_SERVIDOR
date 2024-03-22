@@ -8,6 +8,7 @@ from .models import Producto, Cliente, Compra, Marca
 from .forms import ProductoForm, CompraForm, LoginForm, SignInForm, FormBuscarProducto
 from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Count, Sum
+from django.conf import settings
 
 #Create your views here.
 # welcome(request):
@@ -119,22 +120,23 @@ def checkout(request, pk):
     if request.method == "POST":
         form = CompraForm(request.POST)
         if form.is_valid():
-            unidades = form.cleaned_data['unidades']
-            if unidades <= producto.unidades:
-                producto.unidades -= unidades
-                producto.save()
-                compra = Compra()
-                compra.producto = producto
-                compra.user = cliente
-                compra.unidades = unidades
-                compra.importe = unidades*producto.precio
-                compra.fecha = timezone.now()
-                compra.save()
-                cliente.saldo -= compra.importe
-                cliente.save()
-                return redirect('welcome')
-    form = CompraForm()
+            compra = form.save(commit=False)
+            compra.user = cliente
+            compra.producto = producto
+            compra.fecha = timezone.now()
+            compra.iva = 0.21
+            compra.unidades = form.cleaned_data['unidades']
+            compra.importe = compra.unidades * producto.precio
+            producto.unidades = producto.unidades - compra.unidades
+            cliente.saldo = cliente.saldo - compra.importe
+            cliente.save()
+            producto.save()
+            compra.save()
+            return redirect('welcome')
+    else:
+        form = CompraForm()
     return render(request, 'tienda/checkout.html', {'form': form, 'producto': producto})
+
 
 # mi_login(request):
 # Descripción: Muestra el formulario de inicio de sesión y maneja el proceso de inicio de sesión.
